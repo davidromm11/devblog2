@@ -24,11 +24,11 @@ nav_links:
   - title: Home
     url: /
   - title: Blog
-    url: /blog.html
+    url: /blog/
   - title: About
-    url: /about.html
+    url: /about/
   - title: Contact
-    url: /contact.html
+    url: /contact/
 
 # Author information
 author:
