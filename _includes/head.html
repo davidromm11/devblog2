@@ -55,26 +55,6 @@
   <meta property="og:image" content="{{ page.image | absolute_url }}" />
   {% endif %}
 
-  <!-- Twitter Card -->
-  <meta
-    name="twitter:card"
-    content="summary{% if page.image %}_large_image{% endif %}"
-  />
-  {% if site.twitter.username %}
-  <meta name="twitter:site" content="@{{ site.twitter.username }}" />
-  {% endif %}
-  <meta
-    name="twitter:title"
-    content="{% if page.title %}{{ page.title | escape }}{% else %}{{ site.title }}{% endif %}"
-  />
-  <meta
-    name="twitter:description"
-    content="{{ page.excerpt | default: site.description | strip_html | normalize_whitespace | truncate: 160 | escape }}"
-  />
-  {% if page.image %}
-  <meta name="twitter:image" content="{{ page.image | absolute_url }}" />
-  {% endif %}
-
   <!-- Theme Color -->
   <meta name="theme-color" content="#1e1e2e" />
   <meta name="msapplication-TileColor" content="#1e1e2e" />
