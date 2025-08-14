@@ -1,0 +1,125 @@
+<header class="site-header">
+  <div class="header-container">
+    <div class="header-content">
+      <!-- Site Logo/Title -->
+      <div class="site-title">
+        <a href="{{ '/' | relative_url }}" class="site-title-link">
+          <span class="logo-text">{{ site.title }}</span>
+        </a>
+      </div>
+
+      <!-- Desktop Navigation -->
+      <nav
+        class="nav-menu desktop-nav"
+        role="navigation"
+        aria-label="Main navigation"
+      >
+        <ul class="nav-list">
+          {% for item in site.nav_links %}
+          <li class="nav-item">
+            <a
+              href="{{ item.url | relative_url }}"
+              class="nav-link{% if page.url == item.url %} active{% endif %}"
+            >
+              {{ item.title }}
+            </a>
+          </li>
+          {% endfor %}
+        </ul>
+      </nav>
+
+      <!-- Mobile Menu Toggle -->
+      <button
+        class="mobile-menu-toggle"
+        aria-label="Toggle mobile menu"
+        aria-expanded="false"
+      >
+        <span class="hamburger-line"></span>
+        <span class="hamburger-line"></span>
+        <span class="hamburger-line"></span>
+      </button>
+    </div>
+
+    <!-- Mobile Navigation Menu -->
+    <nav
+      class="nav-menu mobile-nav"
+      role="navigation"
+      aria-label="Mobile navigation"
+    >
+      <ul class="nav-list">
+        {% for item in site.nav_links %}
+        <li class="nav-item">
+          <a
+            href="{{ item.url | relative_url }}"
+            class="nav-link{% if page.url == item.url %} active{% endif %}"
+          >
+            {{ item.title }}
+          </a>
+        </li>
+        {% endfor %}
+      </ul>
+    </nav>
+  </div>
+
+  <!-- Header Background Animation -->
+  <div class="header-bg">
+    <div class="stars"></div>
+    <div class="stars2"></div>
+    <div class="stars3"></div>
+  </div>
+</header>
+
+<!-- Page Hero Section (if applicable) -->
+{% if page.hero or layout.hero %}
+<section class="hero-section">
+  <div class="hero-container">
+    <div class="hero-content">
+      {% if page.hero_title or page.title %}
+      <h1 class="hero-title">{{ page.hero_title | default: page.title }}</h1>
+      {% endif %} {% if page.hero_subtitle or page.description %}
+      <p class="hero-subtitle">
+        {{ page.hero_subtitle | default: page.description }}
+      </p>
+      {% endif %} {% if page.hero_cta %}
+      <div class="hero-cta">
+        <a
+          href="{{ page.hero_cta.url | relative_url }}"
+          class="btn btn-primary"
+        >
+          {{ page.hero_cta.text }}
+        </a>
+      </div>
+      {% endif %}
+    </div>
+  </div>
+</section>
+{% endif %}
+
+<!-- Breadcrumb Navigation -->
+{% unless page.hide_breadcrumb %} {% if page.url != '/' %}
+<nav class="breadcrumb" aria-label="Breadcrumb">
+  <div class="container">
+    <ol class="breadcrumb-list">
+      <li class="breadcrumb-item">
+        <a href="{{ '/' | relative_url }}">Home</a>
+      </li>
+
+      {% assign crumbs = page.url | remove:'/index.html' | split: '/' %} {% for
+      crumb in crumbs offset: 1 %} {% unless forloop.last %} {% capture
+      crumb_url %}{% assign counter = 1 %}{% for c in crumbs offset: 1 limit:
+      counter %}{{ '/' | append: c }}{% assign counter = counter | plus: 1 %}{%
+      endfor %}{% endcapture %}
+      <li class="breadcrumb-item">
+        <a href="{{ crumb_url | relative_url }}">
+          {{ crumb | replace: '-', ' ' | capitalize }}
+        </a>
+      </li>
+      {% else %}
+      <li class="breadcrumb-item active" aria-current="page">
+        {{ page.title | default: crumb | replace: '-', ' ' | capitalize }}
+      </li>
+      {% endunless %} {% endfor %}
+    </ol>
+  </div>
+</nav>
+{% endif %} {% endunless %}

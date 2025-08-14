@@ -1,55 +1,98 @@
-<!doctype html>
-<html lang="{{ site.lang | default: 'en-US' }}">
-  <head>
-    <meta charset="utf-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-
-    {% seo %}
-    <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
-
-    <link rel="stylesheet" href="{{ '/assets/css/style.css?v=' | append: site.github.build_revision | relative_url }}">
-    <script src="https://code.jquery.com/jquery-1.12.4.min.js" integrity="sha256-ZosEbRLbNQzLpnKIkEdrPv7lOy9C27hHQ+Xp8a4MxAQ=" crossorigin="anonymous"></script>
-    <script src="{{ '/assets/js/respond.js' | relative_url }}"></script>
-
-    <!--[if lt IE 9]>
-      <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
-    <![endif]-->
-    <!--[if lt IE 8]>
-      <link rel="stylesheet" href="{{ '/assets/css/ie.css' | relative_url }}">
-    <![endif]-->
-
-    {% include head-custom.html %}
-  </head>
+<!DOCTYPE html>
+<html lang="{{ page.lang | default: site.lang | default: "en" }}">
+  {% include head.html %}
 
   <body>
-    <div id="header">
-      <nav class="nav-bar">
-        <a class="nav-title" href="{{ '/' | relative_url }}">{{ site.title }}</a>
-        <ul class="nav-links">
-          <li><a href="{{ '/' | relative_url }}">Home</a></li>
-          <li><a href="{{ '/posts.html' | relative_url }}">All Posts</a></li>
-          <li><a href="{{ '/about.html' | relative_url }}">About</a></li>
-        </ul>
-      </nav>
-    </div>
+    {% include header.html %}
 
-    <div class="wrapper">
-      <section>
-        <div id="title">
-          <h1><a href="{{ '/' | relative_url }}">{{ site.title | default: site.github.repository_name }}</a></h1>
-          <p>{{ site.description | default: site.github.project_tagline }}</p>
-          <hr>
-          <span class="credits left">
-            Project maintained by <a href="{{ site.github.owner_url }}">{{ site.github.owner_name }}</a>
-          </span>
-          <span class="credits right">
-            Hosted on GitHub Pages &mdash; Theme by <a href="https://twitter.com/mattgraham">mattgraham</a>
-          </span>
-        </div>
-
+    <main id="content" class="main-content" role="main">
+      <div class="container">
         {{ content }}
+      </div>
+    </main>
 
-      </section>
-    </div>
+    {% include footer.html %}
+
+    <!-- Mobile menu toggle script -->
+    <script>
+      document.addEventListener('DOMContentLoaded', function() {
+        const mobileMenuToggle = document.querySelector('.mobile-menu-toggle');
+        const navMenu = document.querySelector('.nav-menu');
+        
+        if (mobileMenuToggle && navMenu) {
+          mobileMenuToggle.addEventListener('click', function() {
+            navMenu.classList.toggle('active');
+            mobileMenuToggle.classList.toggle('active');
+            document.body.classList.toggle('menu-open');
+          });
+
+          // Close menu when clicking outside
+          document.addEventListener('click', function(event) {
+            if (!mobileMenuToggle.contains(event.target) && !navMenu.contains(event.target)) {
+              navMenu.classList.remove('active');
+              mobileMenuToggle.classList.remove('active');
+              document.body.classList.remove('menu-open');
+            }
+          });
+
+          // Close menu when pressing Escape
+          document.addEventListener('keydown', function(event) {
+            if (event.key === 'Escape') {
+              navMenu.classList.remove('active');
+              mobileMenuToggle.classList.remove('active');
+              document.body.classList.remove('menu-open');
+            }
+          });
+        }
+
+        // Smooth scrolling for anchor links
+        const anchorLinks = document.querySelectorAll('a[href^="#"]');
+        anchorLinks.forEach(link => {
+          link.addEventListener('click', function(e) {
+            e.preventDefault();
+            const targetId = this.getAttribute('href');
+            const targetSection = document.querySelector(targetId);
+            
+            if (targetSection) {
+              targetSection.scrollIntoView({
+                behavior: 'smooth',
+                block: 'start'
+              });
+            }
+          });
+        });
+
+        // Add scroll-to-top functionality
+        const scrollToTop = document.querySelector('.scroll-to-top');
+        if (scrollToTop) {
+          window.addEventListener('scroll', function() {
+            if (window.pageYOffset > 300) {
+              scrollToTop.style.display = 'block';
+            } else {
+              scrollToTop.style.display = 'none';
+            }
+          });
+
+          scrollToTop.addEventListener('click', function(e) {
+            e.preventDefault();
+            window.scrollTo({
+              top: 0,
+              behavior: 'smooth'
+            });
+          });
+        }
+      });
+    </script>
+
+    <!-- Google Analytics (if configured) -->
+    {% if site.google_analytics %}
+      <script async src="https://www.googletagmanager.com/gtag/js?id={{ site.google_analytics }}"></script>
+      <script>
+        window.dataLayer = window.dataLayer || [];
+        function gtag(){dataLayer.push(arguments);}
+        gtag('js', new Date());
+        gtag('config', '{{ site.google_analytics }}');
+      </script>
+    {% endif %}
   </body>
 </html>

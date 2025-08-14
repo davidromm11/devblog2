@@ -2,19 +2,189 @@
 layout: default
 ---
 
-<article class="post">
-  <header>
-    <h1 class="post-title">{{ page.title }}</h1>
-    <p class="post-date">{{ page.date | date: "%B %-d, %Y" }}</p>
+<article class="post" itemscope itemtype="http://schema.org/BlogPosting">
+  <header class="post-header">
+    <h1 class="post-title" itemprop="name headline">
+      {{ page.title | escape }}
+    </h1>
+
+    <div class="post-meta">
+      <div
+        class="post-date"
+        itemprop="datePublished"
+        datetime="{{ page.date | date_to_xmlschema }}"
+      >
+        <svg width="16" height="16" fill="currentColor" viewBox="0 0 24 24">
+          <path
+            d="M19 3h-1V1h-2v2H8V1H6v2H5c-1.11 0-1.99.9-1.99 2L3 19c0 1.1.89 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm0 16H5V8h14v11zM7 10h5v5H7z"
+          />
+        </svg>
+        <time datetime="{{ page.date | date_to_xmlschema }}">
+          {{ page.date | date: "%B %d, %Y" }}
+        </time>
+      </div>
+
+      {% if page.author %}
+      <div
+        class="post-author"
+        itemprop="author"
+        itemscope
+        itemtype="http://schema.org/Person"
+      >
+        <svg width="16" height="16" fill="currentColor" viewBox="0 0 24 24">
+          <path
+            d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z"
+          />
+        </svg>
+        <span itemprop="name">{{ page.author }}</span>
+      </div>
+      {% endif %} {% if page.reading_time %}
+      <div class="reading-time">
+        <svg width="16" height="16" fill="currentColor" viewBox="0 0 24 24">
+          <path
+            d="M12,2A10,10 0 0,0 2,12A10,10 0 0,0 12,22A10,10 0 0,0 22,12A10,10 0 0,0 12,2M12,20A8,8 0 0,1 4,12A8,8 0 0,1 12,4A8,8 0 0,1 20,12A8,8 0 0,1 12,20M12.5,7V12.25L17,14.92L16.25,16.15L11,13V7H12.5Z"
+          />
+        </svg>
+        {{ page.reading_time }} min read
+      </div>
+      {% endif %}
+    </div>
   </header>
 
-  <section class="post-content">
-    {{ content }}
-  </section>
+  <div class="post-content" itemprop="articleBody">{{ content }}</div>
 
-  <footer class="post-footer">
-    <a href="{{ '/' | relative_url }}">← Back to home</a> |
-    <a href="{{ '/blog.html' | relative_url }}">View all posts</a>
-  </footer>
+  {% if page.tags and page.tags.size > 0 %}
+  <div class="post-tags">
+    <div class="tags-label">Tagged in:</div>
+    <div class="card-tags">
+      {% for tag in page.tags %}
+      <a
+        href="{{ '/tags/' | append: tag | slugify | relative_url }}"
+        class="tag"
+      >
+        {{ tag }}
+      </a>
+      {% endfor %}
+    </div>
+  </div>
+  {% endif %}
+
+  <!-- Post Navigation -->
+  <nav class="post-navigation" aria-label="Post navigation">
+    {% if page.previous.url %}
+    <div class="nav-previous">
+      <a href="{{ page.previous.url | relative_url }}" rel="prev">
+        <div class="nav-label">← Previous Post</div>
+        <div class="nav-title">{{ page.previous.title }}</div>
+      </a>
+    </div>
+    {% else %}
+    <div></div>
+    {% endif %} {% if page.next.url %}
+    <div class="nav-next">
+      <a href="{{ page.next.url | relative_url }}" rel="next">
+        <div class="nav-label">Next Post →</div>
+        <div class="nav-title">{{ page.next.title }}</div>
+      </a>
+    </div>
+    {% else %}
+    <div></div>
+    {% endif %}
+  </nav>
+
+  <script>
+    // Copy link functionality
+    function copyToClipboard(text) {
+      navigator.clipboard
+        .writeText(text)
+        .then(function () {
+          // Visual feedback
+          const button = event.target.closest('.copy-link')
+          const originalText = button.innerHTML
+          button.innerHTML =
+            '<svg width="20" height="20" fill="currentColor" viewBox="0 0 24 24"><path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z"/></svg> Copied!'
+          button.style.background = '#238636'
+
+          setTimeout(() => {
+            button.innerHTML = originalText
+            button.style.background = ''
+          }, 2000)
+        })
+        .catch(function (err) {
+          console.error('Could not copy text: ', err)
+        })
+    }
+  </script>
+
+  <style>
+    .post-share {
+      margin-top: 2rem;
+      padding-top: 2rem;
+      border-top: 1px solid var(--border-color);
+      text-align: center;
+    }
+
+    .post-share h4 {
+      margin-bottom: 1rem;
+      color: var(--text-color-heading);
+    }
+
+    .share-buttons {
+      display: flex;
+      justify-content: center;
+      gap: 1rem;
+      flex-wrap: wrap;
+    }
+
+    .share-button {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      padding: 0.75rem 1rem;
+      background: var(--bg-tertiary);
+      color: var(--text-color-secondary);
+      border: 1px solid var(--border-color);
+      border-radius: 0.375rem;
+      text-decoration: none;
+      font-size: 0.875rem;
+      font-weight: 500;
+      transition: all 0.3s ease;
+      cursor: pointer;
+    }
+
+    .share-button:hover {
+      text-decoration: none;
+      transform: translateY(-2px);
+    }
+
+    .share-button.twitter:hover {
+      background: #1da1f2;
+      color: white;
+      border-color: #1da1f2;
+    }
+
+    .share-button.linkedin:hover {
+      background: #0077b5;
+      color: white;
+      border-color: #0077b5;
+    }
+
+    .share-button.facebook:hover {
+      background: #4267b2;
+      color: white;
+      border-color: #4267b2;
+    }
+
+    .share-button.copy-link:hover {
+      background: var(--accent-color);
+      color: white;
+      border-color: var(--accent-color);
+    }
+
+    .post-comments {
+      margin-top: 3rem;
+      padding-top: 2rem;
+      border-top: 1px solid var(--border-color);
+    }
+  </style>
 </article>
-
