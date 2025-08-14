@@ -16,6 +16,9 @@ plugins:
   - jekyll-sitemap
   - jekyll-seo-tag
 
+# Permalink settings - this controls how blog post URLs are generated
+permalink: /:year/:month/:day/:title/
+
 # Navigation
 nav_links:
   - title: Home
@@ -52,12 +55,6 @@ social:
     - https://github.com/davidromm11
     - https://www.linkedin.com/in/david-romm/
 
-# Collections
-collections:
-  posts:
-    output: true
-    permalink: none
-
 # Sass
 sass:
   sass_dir: _sass
@@ -70,7 +67,7 @@ defaults:
       type: 'posts'
     values:
       layout: 'post'
-      author: 'Your Name'
+      author: 'David Romm'
   - scope:
       path: ''
     values:
