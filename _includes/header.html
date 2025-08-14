@@ -18,7 +18,7 @@
           {% for item in site.nav_links %}
           <li class="nav-item">
             <a
-              href="{{ item.url | relative_url }}"
+              href="{{ item.url }}"
               class="nav-link{% if page.url == item.url %} active{% endif %}"
             >
               {{ item.title }}
@@ -50,7 +50,7 @@
         {% for item in site.nav_links %}
         <li class="nav-item">
           <a
-            href="{{ item.url | relative_url }}"
+            href="{{ item.url }}"
             class="nav-link{% if page.url == item.url %} active{% endif %}"
           >
             {{ item.title }}
@@ -101,7 +101,7 @@
   <div class="container">
     <ol class="breadcrumb-list">
       <li class="breadcrumb-item">
-        <a href="{{ '/' | relative_url }}">Home</a>
+        <a href="{{ '/' }}">Home</a>
       </li>
 
       {% assign crumbs = page.url | remove:'/index.html' | split: '/' %} {% for
