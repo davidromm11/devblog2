@@ -3,7 +3,7 @@ layout: default
 title: Home
 hero: true
 hero_title: 'Welcome to my Blog'
-hero_subtitle: 'Where I document my exploration of IT. Join me on my journey through web development, programming insights, and tech discoveries.'
+hero_subtitle: 'Where I document my exploration of IT. Join me on my journey.'
 hero_cta:
   text: 'View all Posts'
   url: '/blog/'
